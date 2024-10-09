@@ -140,7 +140,7 @@ const CreatePostInput: React.FC<CreatePostInputProps> = ({
                             name='text'
                             value={inputValue}
                             onChange={handleResizeTextareaChange}
-                            placeholder="Start a thread..."
+                            placeholder="Start a smith..."
                             maxLength={200}
                         />
                         {previewURL && (
