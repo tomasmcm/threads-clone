@@ -4,36 +4,15 @@ on:
     types: [created]
 
 jobs:
-  process-pr-comment:
+  trigger-aider-workflow:
     if: ${{ github.event.issue.pull_request && startsWith(github.event.comment.body, '/aider') }}
     runs-on: ubuntu-latest
     steps:
-      - name: Get PR details
-        id: pr_details
-        uses: actions/github-script@v7
+      - name: Trigger Aider PR Update Workflow
+        uses: tomasmcm/threads-clone/.github/workflows/aider-pr-update.yml@main
         with:
-          script: |
-            const { owner, repo } = context.repo;
-            const pr = await github.rest.pulls.get({
-              owner,
-              repo,
-              pull_number: context.issue.number
-            });
-            return {
-              head_sha: pr.data.head.sha,
-              head_ref: pr.data.head.ref,
-              base_ref: pr.data.base.ref
-            };
-
-  trigger-aider-workflow:
-    needs: process-pr-comment
-    uses: tomasmcm/threads-clone/.github/workflows/aider-pr-update.yml@main
-    with:
-      pr-number: ${{ github.event.issue.number }}
-      base-branch: ${{ needs.process-pr-comment.outputs.pr_details.base_ref }}
-      head-branch: ${{ needs.process-pr-comment.outputs.pr_details.head_ref }}
-      head-sha: ${{ needs.process-pr-comment.outputs.pr_details.head_sha }}
-      comment: ${{ github.event.comment.body }}
-      model: 'claude-3-5-sonnet-20240620'
-    secrets: 
-      anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          pr-number: ${{ github.event.issue.number }}
+          comment: ${{ github.event.comment.body }}
+          model: 'claude-3-5-sonnet-20240620'
+        secrets: 
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}

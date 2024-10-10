@@ -15,14 +15,6 @@ on:
         description: "PR number"
         required: true
         type: number
-      head-branch:
-        description: "Head branch of the PR"
-        required: true
-        type: string
-      head-sha:
-        description: "SHA of the head commit"
-        required: true
-        type: string
       comment:
         description: "Comment that triggered the workflow"
         required: true
@@ -62,10 +54,25 @@ jobs:
       contents: write
     runs-on: ubuntu-latest
     steps:
+      - name: Get PR details
+        uses: actions/github-script@v7
+        id: get_pr_details
+        with:
+          script: |
+            const { repo, owner } = context.repo;
+            const pr = await github.rest.pulls.get({
+              owner,
+              repo,
+              pull_number: ${{ inputs.pr-number }}
+            });
+            return {
+              head_ref: pr.data.head.ref,
+              head_sha: pr.data.head.sha
+            };
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          ref: ${{ inputs.head-branch }}
+          ref: ${{ fromJson(steps.get_pr_details.outputs.result).head_ref }}
           fetch-depth: 0
 
       - name: Create prompt
@@ -83,7 +90,7 @@ jobs:
         uses: mirrajabi/aider-github-action@main
         timeout-minutes: ${{ inputs.chat-timeout }}
         with:
-          branch: refs/heads/${{ inputs.head-branch }}
+          branch: refs/heads/${{ fromJson(steps.get_pr_details.outputs.result).head_ref }}
           model: ${{ inputs.model }}
           aider_args: '--yes-always --architect --no-auto-lint --message "${{ steps.create_prompt.outputs.result }}" --chat-history-file ".aider.chat.history.md"'
           # API keys
