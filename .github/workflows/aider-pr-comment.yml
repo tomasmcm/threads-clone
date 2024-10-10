@@ -30,9 +30,9 @@ jobs:
               }
               throw error;
             }
-
-      - name: Trigger Aider workflow
+      - name: Get PR details and prepare inputs
         if: steps.check_collaborator.outputs.result == 'true'
+        id: pr_details
         uses: actions/github-script@v7
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
@@ -49,16 +49,21 @@ jobs:
               
               const commentBody = comment.substring(6).trim(); // Remove '/aider' and trim whitespace
               
-              await github.rest.actions.createWorkflowDispatch({
-                owner,
-                repo,
-                workflow_id: 'aider-issue-to-pr.yml',
-                ref: 'main',
-                inputs: {
-                  'base-branch': pr.data.base.ref,
-                  'pr-number': context.issue.number.toString(),
-                  'model': 'claude-3-5-sonnet-20240620',
-                  'comment-body': commentBody
-                }
-              });
+              return {
+                baseBranch: pr.data.base.ref,
+                prNumber: context.issue.number.toString(),
+                commentBody: commentBody
+              };
             }
+            return null;
+      - name: Trigger Aider workflow
+        if: steps.pr_details.outputs.result != 'null'
+        uses: ./.github/workflows/aider-issue-to-pr.yml
+        with:
+          base-branch: ${{ fromJson(steps.pr_details.outputs.result).baseBranch }}
+          pr-number: ${{ fromJson(steps.pr_details.outputs.result).prNumber }}
+          comment-body: ${{ fromJson(steps.pr_details.outputs.result).commentBody }}
+          model: 'claude-3-5-sonnet-20240620'
+        secrets:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+      
