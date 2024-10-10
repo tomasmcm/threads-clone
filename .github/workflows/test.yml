@@ -1,4 +1,4 @@
-name: Aider Issue to PR workflow
+name: Test
 on:
   workflow_call:
     inputs:
