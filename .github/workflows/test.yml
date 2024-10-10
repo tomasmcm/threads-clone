@@ -20,6 +20,28 @@ on:
         required: false
         type: string
         default: "gpt-4-1106-preview"
+    secrets:
+      openai_api_key:
+        description: "OpenAI API key"
+        required: false
+      anthropic_api_key:
+        description: "Anthropic API Key"
+        required: false
+      gemini_api_key:
+        description: "Gemini API Key"
+        required: false
+      groq_api_key:
+        description: "Groq API Key"
+        required: false
+      cohere_api_key:
+        description: "Cohere API Key"
+        required: false
+      deepseek_api_key:
+        description: "Deepseek API Key"
+        required: false
+      openrouter_api_key:
+        description: "OpenRouter API Key"
+        required: false
 
 jobs:
   create-pull-request:
