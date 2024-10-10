@@ -25,14 +25,15 @@ jobs:
               base_ref: pr.data.base.ref
             };
 
-      - name: Trigger Aider workflow
-        uses: tomasmcm/threads-clone/.github/workflows/aider-pr-update.yml@main
-        with:
-          pr-number: ${{ github.event.issue.number }}
-          base-branch: ${{ steps.pr_details.outputs.result.base_ref }}
-          head-branch: ${{ steps.pr_details.outputs.result.head_ref }}
-          head-sha: ${{ steps.pr_details.outputs.result.head_sha }}
-          comment: ${{ github.event.comment.body }}
-          model: 'claude-3-5-sonnet-20240620'
-        secrets: 
-          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+  trigger-aider-workflow:
+    needs: process-pr-comment
+    uses: tomasmcm/threads-clone/.github/workflows/aider-pr-update.yml@main
+    with:
+      pr-number: ${{ github.event.issue.number }}
+      base-branch: ${{ needs.process-pr-comment.outputs.pr_details.base_ref }}
+      head-branch: ${{ needs.process-pr-comment.outputs.pr_details.head_ref }}
+      head-sha: ${{ needs.process-pr-comment.outputs.pr_details.head_sha }}
+      comment: ${{ github.event.comment.body }}
+      model: 'claude-3-5-sonnet-20240620'
+    secrets: 
+      anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
