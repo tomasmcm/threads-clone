@@ -159,7 +159,7 @@ jobs:
         with:
           branch: ${{ fromJson(steps.create_branch.outputs.result).ref }}
           model: ${{ inputs.model }}
-          aider_args: '--yes --message "${{ steps.create_prompt.outputs.result }}"'
+          aider_args: '--yes-always --architect --no-auto-lint --message "${{ steps.create_prompt.outputs.result }}"'
           # API keys
           openai_api_key: ${{ secrets.openai_api_key }}
           anthropic_api_key: ${{ secrets.anthropic_api_key }}
