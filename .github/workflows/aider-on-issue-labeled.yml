@@ -1,0 +1,15 @@
+name: Auto-generate PR using Aider
+on:
+  issues:
+    types: [labeled]
+
+jobs:
+  generate:
+    uses: mirrajabi/aider-github-action/.github/workflows/aider-issue-to-pr.yml@main
+    if: github.event.label.name == 'aider'
+    with:
+      issue-number: ${{ github.event.issue.number }}
+      base-branch: ${{ github.event.repository.default_branch }}
+      model: 'claude-3-5-sonnet-20240620'
+    secrets: 
+      anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
