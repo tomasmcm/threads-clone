@@ -171,6 +171,7 @@ jobs:
 
       - name: Create Pull Request
         uses: actions/github-script@v7
+        id: create_pull_request
         with:
           script: |
             console.log('Starting Create Pull Request step');

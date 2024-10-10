@@ -5,7 +5,7 @@ on:
 
 jobs:
   generate:
-    uses: tomasmcm/threads-clone/.github/workflows/aider-issue-to-pr.yml@main
+    uses: tomasmcm/threads-clone/.github/workflows/test.yml@main
     if: github.event.label.name == 'aider'
     with:
       issue-number: ${{ github.event.issue.number }}
