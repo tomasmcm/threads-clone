@@ -83,7 +83,7 @@ jobs:
         uses: mirrajabi/aider-github-action@main
         timeout-minutes: ${{ inputs.chat-timeout }}
         with:
-          branch: ${{ inputs.head-branch }}
+          branch: refs/heads/${{ inputs.head-branch }}
           model: ${{ inputs.model }}
           aider_args: '--yes-always --architect --no-auto-lint --message "${{ steps.create_prompt.outputs.result }}" --chat-history-file ".aider.chat.history.md"'
           # API keys
