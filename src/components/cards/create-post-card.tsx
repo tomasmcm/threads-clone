@@ -183,7 +183,7 @@ const CreatePostCard: React.FC = ({}) => {
       </DialogTrigger>
       <DialogContent className="w-full max-w-lg select-none border-none bg-transparent shadow-none outline-none sm:max-w-[668px]">
         <h1 className="mb-2 w-full text-center font-bold text-white">
-          {replyPostInfo ? <>Reply</> : <>New thread</>}
+          {replyPostInfo ? <>Reply</> : <>New smith</>}
         </h1>
         <Card className="rounded-2xl border-none bg-background shadow-2xl ring-1 ring-[#393939] ring-offset-0 dark:bg-[#181818] ">
           <div className="no-scrollbar max-h-[70vh] overflow-y-auto p-6 ">
