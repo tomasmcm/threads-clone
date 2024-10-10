@@ -6,13 +6,10 @@ on:
 jobs:
   trigger-aider-workflow:
     if: ${{ github.event.issue.pull_request && startsWith(github.event.comment.body, '/aider') }}
-    runs-on: ubuntu-latest
-    steps:
-      - name: Trigger Aider PR Update Workflow
-        uses: tomasmcm/threads-clone/.github/workflows/aider-pr-update.yml@main
-        with:
-          pr-number: ${{ github.event.issue.number }}
-          comment: ${{ github.event.comment.body }}
-          model: 'claude-3-5-sonnet-20240620'
-        secrets: 
-          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+    uses: tomasmcm/threads-clone/.github/workflows/aider-pr-update.yml@main
+    with:
+      pr-number: ${{ github.event.issue.number }}
+      comment: ${{ github.event.comment.body }}
+      model: 'claude-3-5-sonnet-20240620'
+    secrets: 
+      anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
