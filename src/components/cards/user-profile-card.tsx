@@ -36,7 +36,7 @@ const UserProfileCard: React.FC<UserProfileCardProps> = (props) => {
                         <h4 className="text-[15px] truncate">
                             {username}
                         </h4>
-                        <span className="ml-0.5 rounded-2xl bg-primary text-[#777777] text-xm px-1.5 py-1 text-[11px] font-medium">smiths.net</span>
+                        <span className="ml-0.5 rounded-2xl bg-primary text-[#777777] text-xm px-1.5 py-1 text-[11px] font-medium">threads.net</span>
                     </div>
                 </div>
                 <Avatar className="h-[64px] w-[64px] overflow-visible outline outline-2 outline-border relative">
