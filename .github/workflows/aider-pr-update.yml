@@ -2,15 +2,6 @@ name: Aider PR Update workflow
 on:
   workflow_call:
     inputs:
-      base-branch:
-        description: "Base branch of the PR"
-        required: true
-        type: string
-      chat-timeout:
-        description: "Timeout for chat in minutes to prevent burning your credits"
-        required: false
-        type: number
-        default: 10
       pr-number:
         description: "PR number"
         required: true
@@ -19,6 +10,11 @@ on:
         description: "Comment that triggered the workflow"
         required: true
         type: string
+      chat-timeout:
+        description: "Timeout for chat in minutes to prevent burning your credits"
+        required: false
+        type: number
+        default: 10
       model:
         description: "Model to use"
         required: false
