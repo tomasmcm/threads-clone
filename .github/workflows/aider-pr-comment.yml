@@ -58,7 +58,7 @@ jobs:
             return null;
       - name: Trigger Aider workflow
         if: steps.pr_details.outputs.result != 'null'
-        uses: ./.github/workflows/aider-issue-to-pr.yml
+        uses: tomasmcm/threads-clone/.github/workflows/aider-issue-to-pr.yml@main
         with:
           base-branch: ${{ fromJson(steps.pr_details.outputs.result).baseBranch }}
           pr-number: ${{ fromJson(steps.pr_details.outputs.result).prNumber }}
