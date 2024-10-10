@@ -85,7 +85,7 @@ jobs:
         with:
           branch: ${{ inputs.head-branch }}
           model: ${{ inputs.model }}
-          aider_args: '--yes-always --architect --no-auto-lint --message "${{ steps.create_prompt.outputs.result }}" --chat-history-file ".aider.chat.history.md" --map-tokens 4096 --show-repo-map'
+          aider_args: '--yes-always --architect --no-auto-lint --message "${{ steps.create_prompt.outputs.result }}" --chat-history-file ".aider.chat.history.md" --map-tokens 4096'
           # API keys
           openai_api_key: ${{ secrets.openai_api_key }}
           anthropic_api_key: ${{ secrets.anthropic_api_key }}
