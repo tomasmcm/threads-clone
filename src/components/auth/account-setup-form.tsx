@@ -64,7 +64,7 @@ export default function AccountSetupForm({ username }: { username: string }) {
             if (success) {
                 router.push(origin ? `${origin}` : '/')
             }
-            toast.success(`Welcome to threads ${username} !`)
+            toast.success(`Welcome to smiths ${username} !`)
 
         },
         onError: (err) => {
@@ -137,7 +137,7 @@ export default function AccountSetupForm({ username }: { username: string }) {
                                     Profile
                                 </h2>
                                 <span className="leading-7 text-muted-foreground ">
-                                    Customize your Threads profile
+                                    Customize your Smiths profile
                                 </span>
                                 <Card className='w-full p-6 px-8 bg-transparent rounded-2xl my-4 sm:mt-10'>
                                     <div className="flex flex-col gap-4">
