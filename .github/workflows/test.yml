@@ -6,10 +6,20 @@ on:
         description: "Base branch to create PR against"
         required: true
         type: string
+      chat-timeout:
+        description: "Timeout for chat in minutes to prevent burning your credits"
+        required: false
+        type: number
+        default: 10
       issue-number:
         description: "Issue number"
         required: true
         type: number
+      model:
+        description: "Model to use"
+        required: false
+        type: string
+        default: "gpt-4-1106-preview"
 
 jobs:
   create-pull-request:
