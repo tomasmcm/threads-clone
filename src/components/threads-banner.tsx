@@ -5,7 +5,7 @@ import React from 'react'
 import { Icons } from '@/components/icons'
 import Image from 'next/image'
 
-export default function ThreadsBanner() {
+export default function SmithsBanner() {
     const { isMobile } = useWindow()
     return (
         <header className="max-w-screen-md  md:max-w-screen-2xl lg:max-w-[1800px] mx-auto">
