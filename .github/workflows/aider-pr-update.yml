@@ -1,0 +1,122 @@
+name: Aider PR Update workflow
+on:
+  workflow_call:
+    inputs:
+      base-branch:
+        description: "Base branch of the PR"
+        required: true
+        type: string
+      chat-timeout:
+        description: "Timeout for chat in minutes to prevent burning your credits"
+        required: false
+        type: number
+        default: 10
+      pr-number:
+        description: "PR number"
+        required: true
+        type: number
+      head-branch:
+        description: "Head branch of the PR"
+        required: true
+        type: string
+      head-sha:
+        description: "SHA of the head commit"
+        required: true
+        type: string
+      comment:
+        description: "Comment that triggered the workflow"
+        required: true
+        type: string
+      model:
+        description: "Model to use"
+        required: false
+        type: string
+        default: "claude-3-5-sonnet-20240620"
+    secrets:
+      openai_api_key:
+        description: "OpenAI API key"
+        required: false
+      anthropic_api_key:
+        description: "Anthropic API Key"
+        required: false
+      gemini_api_key:
+        description: "Gemini API Key"
+        required: false
+      groq_api_key:
+        description: "Groq API Key"
+        required: false
+      cohere_api_key:
+        description: "Cohere API Key"
+        required: false
+      deepseek_api_key:
+        description: "Deepseek API Key"
+        required: false
+      openrouter_api_key:
+        description: "OpenRouter API Key"
+        required: false
+
+jobs:
+  update-pull-request:
+    permissions:
+      pull-requests: write
+      contents: write
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.head-branch }}
+          fetch-depth: 0
+
+      - name: Create prompt
+        id: create_prompt
+        run: |
+          COMMENT="${{ inputs.comment }}"
+          PROMPT="${COMMENT#/aider}"
+          PROMPT="Apply all necessary changes to implement the following request: $PROMPT"
+          echo "prompt=$PROMPT" >> $GITHUB_OUTPUT
+
+      - name: Apply changes with Aider
+        uses: mirrajabi/aider-github-action@main
+        timeout-minutes: ${{ inputs.chat-timeout }}
+        with:
+          branch: ${{ inputs.head-branch }}
+          model: ${{ inputs.model }}
+          aider_args: '--yes-always --architect --no-auto-lint --message "${{ steps.create_prompt.outputs.prompt }}" --chat-history-file ".aider.chat.history.md"'
+          # API keys
+          openai_api_key: ${{ secrets.openai_api_key }}
+          anthropic_api_key: ${{ secrets.anthropic_api_key }}
+          cohere_api_key: ${{ secrets.cohere_api_key }}
+          deepseek_api_key: ${{ secrets.deepseek_api_key }}
+          gemini_api_key: ${{ secrets.gemini_api_key }}
+          groq_api_key: ${{ secrets.groq_api_key }}
+          openrouter_api_key: ${{ secrets.openrouter_api_key }}
+
+      - name: Check for chat history file
+        run: |
+          if [ -f ".aider.chat.history.md" ]; then
+            echo "Chat history file exists"
+          else
+            echo "Chat history file not found"
+            echo "Current directory contents:"
+            ls -la
+          fi
+
+      - name: Upload aider chat history
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: aider-chat-output
+          path: ".aider.chat.history.md"
+
+      - name: Add comment to PR
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            github.rest.issues.createComment({
+              issue_number: ${{ inputs.pr-number }},
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: 'Aider has processed your request. Please review the changes and let me know if you need any further modifications.'
+            })
