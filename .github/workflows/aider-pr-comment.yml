@@ -59,12 +59,12 @@ jobs:
 
   trigger-aider-workflow:
     needs: process-pr-comment
-    if: needs.process-pr-comment.outputs.pr_details != 'null'
+    if: needs.process-pr-comment.outputs.pr_details
     uses: tomasmcm/threads-clone/.github/workflows/aider-issue-to-pr.yml@main
     with:
-      base-branch: ${{ fromJson(needs.process-pr-comment.outputs.pr_details).baseBranch }}
-      pr-number: ${{ fromJson(needs.process-pr-comment.outputs.pr_details).prNumber }}
-      comment-body: ${{ fromJson(needs.process-pr-comment.outputs.pr_details).commentBody }}
+      base-branch: ${{ fromJSON(needs.process-pr-comment.outputs.pr_details).baseBranch }}
+      pr-number: ${{ fromJSON(needs.process-pr-comment.outputs.pr_details).prNumber }}
+      comment-body: ${{ fromJSON(needs.process-pr-comment.outputs.pr_details).commentBody }}
       model: 'claude-3-5-sonnet-20240620'
     secrets:
       anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
