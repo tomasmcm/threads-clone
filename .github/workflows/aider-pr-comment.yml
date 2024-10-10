@@ -56,14 +56,15 @@ jobs:
               };
             }
             return null;
-      - name: Trigger Aider workflow
-        if: steps.pr_details.outputs.result != 'null'
-        uses: tomasmcm/threads-clone/.github/workflows/aider-issue-to-pr.yml@main
-        with:
-          base-branch: ${{ fromJson(steps.pr_details.outputs.result).baseBranch }}
-          pr-number: ${{ fromJson(steps.pr_details.outputs.result).prNumber }}
-          comment-body: ${{ fromJson(steps.pr_details.outputs.result).commentBody }}
-          model: 'claude-3-5-sonnet-20240620'
-        secrets:
-          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
-      
+
+  trigger-aider-workflow:
+    needs: process-pr-comment
+    if: needs.process-pr-comment.outputs.pr_details != 'null'
+    uses: tomasmcm/threads-clone/.github/workflows/aider-issue-to-pr.yml@main
+    with:
+      base-branch: ${{ fromJson(needs.process-pr-comment.outputs.pr_details).baseBranch }}
+      pr-number: ${{ fromJson(needs.process-pr-comment.outputs.pr_details).prNumber }}
+      comment-body: ${{ fromJson(needs.process-pr-comment.outputs.pr_details).commentBody }}
+      model: 'claude-3-5-sonnet-20240620'
+    secrets:
+      anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
