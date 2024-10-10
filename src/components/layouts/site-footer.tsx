@@ -13,7 +13,7 @@ export default function SiteFooter() {
                 </li>
                 <li>
                     <a href="#" className="text-gray-500 transition hover:opacity-75">
-                        Smiths Terms
+                        Threads Terms
                     </a>
                 </li>
 
