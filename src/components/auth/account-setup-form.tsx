@@ -206,7 +206,7 @@ export default function AccountSetupForm({ username }: { username: string }) {
                             Privacy
                         </h2>
                         <span className="leading-7 text-muted-foreground text-center ">
-                            Your privacy can be different on Threads and Instagarm.
+                            Your privacy can be different on Smiths and Instagram.
                         </span>
 
                         <RadioGroup defaultValue="public" className="flex flex-col gap-3 w-full mt-6 sm:mt-10">
