@@ -1,0 +1,64 @@
+name: Aider PR Comment Workflow
+on:
+  issue_comment:
+    types: [created]
+
+jobs:
+  process-pr-comment:
+    if: github.event.issue.pull_request
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check if comment is from a collaborator
+        id: check_collaborator
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            const { repo, owner } = context.repo;
+            const username = context.payload.comment.user.login;
+            
+            try {
+              const { data: collaboratorStatus } = await github.rest.repos.checkCollaborator({
+                owner,
+                repo,
+                username,
+              });
+              return collaboratorStatus;
+            } catch (error) {
+              if (error.status === 404) {
+                return false;
+              }
+              throw error;
+            }
+
+      - name: Trigger Aider workflow
+        if: steps.check_collaborator.outputs.result == 'true'
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            const { repo, owner } = context.repo;
+            const comment = context.payload.comment.body;
+            
+            if (comment.toLowerCase().startsWith('/aider')) {
+              const pr = await github.rest.pulls.get({
+                owner,
+                repo,
+                pull_number: context.issue.number
+              });
+              
+              const commentBody = comment.substring(6).trim(); // Remove '/aider' and trim whitespace
+              
+              await github.rest.actions.createWorkflowDispatch({
+                owner,
+                repo,
+                workflow_id: 'aider-issue-to-pr.yml',
+                ref: 'main',
+                inputs: {
+                  'base-branch': pr.data.base.ref,
+                  'pr-number': context.issue.number.toString(),
+                  'model': 'claude-3-5-sonnet-20240620',
+                  'comment-body': commentBody
+                }
+              });
+            }

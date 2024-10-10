@@ -13,13 +13,21 @@ on:
         default: 10
       issue-number:
         description: "Issue number"
-        required: true
+        required: false
         type: number
+      pr-number:
+        description: "PR number"
+        required: false
+        type: number
+      comment-body:
+        description: "Content of the comment"
+        required: false
+        type: string
       model:
         description: "Model to use"
         required: false
         type: string
-        default: "gpt-4-1106-preview"
+        default: "claude-3-5-sonnet-20240620"
     secrets:
       openai_api_key:
         description: "OpenAI API key"
@@ -125,19 +133,33 @@ jobs:
 
             return { ref: result.data.ref }
 
-      - name: Get issue
+      - name: Get issue or PR
         uses: actions/github-script@v7
-        id: get_issue
+        id: get_issue_or_pr
         with:
           script: |
-            console.log('Fetching issue #${{ inputs.issue-number }}')
             const { repo, owner } = context.repo;
-            const result = await github.rest.issues.get({
-              owner,
-              repo,
-              issue_number: ${{ inputs.issue-number }}
-            });
-            console.log(`Fetched issue #${result.data.number}: ${result.data.title}`)
+            let result;
+            
+            if (${{ inputs.issue-number }}) {
+              console.log('Fetching issue #${{ inputs.issue-number }}')
+              result = await github.rest.issues.get({
+                owner,
+                repo,
+                issue_number: ${{ inputs.issue-number }}
+              });
+              console.log(`Fetched issue #${result.data.number}: ${result.data.title}`)
+            } else if (${{ inputs.pr-number }}) {
+              console.log('Fetching PR #${{ inputs.pr-number }}')
+              result = await github.rest.pulls.get({
+                owner,
+                repo,
+                pull_number: ${{ inputs.pr-number }}
+              });
+              console.log(`Fetched PR #${result.data.number}: ${result.data.title}`)
+            } else {
+              throw new Error('Either issue-number or pr-number must be provided');
+            }
 
             return { 
               title: result.data.title.replace(/"/g, "'").replace(/`/g, '\\`'), 
@@ -149,8 +171,8 @@ jobs:
         with:
           result-encoding: string
           script: |
-            const title = `${{ fromJson(steps.get_issue.outputs.result).title }}`;
-            const body = `${{ fromJson(steps.get_issue.outputs.result).body }}`;
+            const title = `${{ fromJson(steps.get_issue_or_pr.outputs.result).title }}`;
+            const body = `${{ inputs.comment-body || fromJson(steps.get_issue_or_pr.outputs.result).body }}`;
 
             return `Apply all necessary changes based on below issue description. \nIssue title: ${title}\nIssue description:\n${body}`;
       - name: Apply changes with Aider
@@ -159,7 +181,7 @@ jobs:
         with:
           branch: ${{ fromJson(steps.create_branch.outputs.result).ref }}
           model: ${{ inputs.model }}
-          aider_args: '--yes-always --architect --no-auto-lint --message "${{ steps.create_prompt.outputs.result }}"'
+          aider_args: '--yes-always --architect --no-auto-lint --message "${{ steps.create_prompt.outputs.result }}" --chat-history-file ".aider.chat.history.md"'
           # API keys
           openai_api_key: ${{ secrets.openai_api_key }}
           anthropic_api_key: ${{ secrets.anthropic_api_key }}
@@ -169,14 +191,15 @@ jobs:
           groq_api_key: ${{ secrets.groq_api_key }}
           openrouter_api_key: ${{ secrets.openrouter_api_key }}
 
-      - name: Create Pull Request
+      - name: Create Pull Request or Update Existing
         uses: actions/github-script@v7
-        id: create_pull_request
+        id: create_or_update_pr
         env:
-          ISSUE_TITLE: ${{ fromJson(steps.get_issue.outputs.result).title }}
+          ISSUE_TITLE: ${{ fromJson(steps.get_issue_or_pr.outputs.result).title }}
           BRANCH_REF: ${{ fromJson(steps.create_branch.outputs.result).ref }}
           BASE_BRANCH: ${{ inputs.base-branch }}
           ISSUE_NUMBER: ${{ inputs.issue-number }}
+          PR_NUMBER: ${{ inputs.pr-number }}
         with:
           script: |
             const { repo, owner } = context.repo;
@@ -215,8 +238,18 @@ jobs:
             });
 
             console.log(`Created PR #${newPR.data.number}: ${newPR.data.html_url}`);
+      - name: Check for chat history file
+        run: |
+          if [ -f ".aider.chat.history.md" ]; then
+            echo "Chat history file exists"
+          else
+            echo "Chat history file not found"
+            echo "Current directory contents:"
+            ls -la
+          fi
       - name: Upload aider chat history
         uses: actions/upload-artifact@v3
+        if: always()
         with:
           name: aider-chat-output
           path: ".aider.chat.history.md"
