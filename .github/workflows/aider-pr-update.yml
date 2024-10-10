@@ -85,7 +85,7 @@ jobs:
         with:
           branch: ${{ inputs.head-branch }}
           model: ${{ inputs.model }}
-          aider_args: '--yes-always --architect --no-auto-lint --chat-history-file ".aider.chat.history.md" --map-tokens 4096'
+          aider_args: '--yes-always --architect --no-auto-lint --message "${{ steps.create_prompt.outputs.result }}" --chat-history-file ".aider.chat.history.md"'
           # API keys
           openai_api_key: ${{ secrets.openai_api_key }}
           anthropic_api_key: ${{ secrets.anthropic_api_key }}
@@ -94,57 +94,6 @@ jobs:
           gemini_api_key: ${{ secrets.gemini_api_key }}
           groq_api_key: ${{ secrets.groq_api_key }}
           openrouter_api_key: ${{ secrets.openrouter_api_key }}
-          custom_command: |
-            python3 - <<EOF
-            import subprocess
-            import time
-            import sys
-
-            def run_aider():
-                process = subprocess.Popen(
-                    ['aider'] + '${{ inputs.aider_args }}'.split(),
-                    stdin=subprocess.PIPE,
-                    stdout=subprocess.PIPE,
-                    stderr=subprocess.PIPE,
-                    text=True,
-                    bufsize=1,
-                    universal_newlines=True
-                )
-
-                # Wait for Aider to initialize
-                while True:
-                    output = process.stdout.readline()
-                    print(output, end='')
-                    if "architect>" in output:
-                        break
-
-                # Send the command
-                command = '${{ steps.create_prompt.outputs.result }}'
-                process.stdin.write(command + '\n')
-                process.stdin.flush()
-
-                # Monitor output
-                last_output_time = time.time()
-                while True:
-                    output = process.stdout.readline()
-                    if output:
-                        print(output, end='')
-                        last_output_time = time.time()
-                    else:
-                        if time.time() - last_output_time > 10:
-                            break
-                    
-                    # Check if process has ended
-                    if process.poll() is not None:
-                        break
-
-                # Close the process
-                process.stdin.close()
-                process.terminate()
-                process.wait(timeout=10)
-
-            run_aider()
-            EOF
 
       - name: Check for chat history file
         run: |
