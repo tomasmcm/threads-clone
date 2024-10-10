@@ -70,19 +70,20 @@ jobs:
 
       - name: Create prompt
         id: create_prompt
-        run: |
-          COMMENT="${{ inputs.comment }}"
-          PROMPT="${COMMENT#/aider}"
-          PROMPT="Apply all necessary changes to implement the following request: $PROMPT"
-          echo "prompt=$PROMPT" >> $GITHUB_OUTPUT
-
+        uses: actions/github-script@v7
+        with:
+          result-encoding: string
+          script: |
+            const comment = '${{ inputs.comment }}';
+            const prompt = comment.replace(/^\/aider\s*/, '');
+            return `Apply all necessary changes to implement the following request: \n${prompt}`;
       - name: Apply changes with Aider
         uses: mirrajabi/aider-github-action@main
         timeout-minutes: ${{ inputs.chat-timeout }}
         with:
           branch: ${{ inputs.head-branch }}
           model: ${{ inputs.model }}
-          aider_args: '--yes-always --architect --no-auto-lint --message "${{ steps.create_prompt.outputs.prompt }}" --chat-history-file ".aider.chat.history.md"'
+          aider_args: '--yes-always --architect --no-auto-lint --message "${{ steps.create_prompt.outputs.result }}" --chat-history-file ".aider.chat.history.md"'
           # API keys
           openai_api_key: ${{ secrets.openai_api_key }}
           anthropic_api_key: ${{ secrets.anthropic_api_key }}
