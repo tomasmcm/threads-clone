@@ -10,6 +10,16 @@ on:
         description: "Issue number"
         required: true
         type: number
+  workflow_dispatch:
+    inputs:
+      base-branch:
+        description: "Base branch to create PR against"
+        required: true
+        type: string
+      issue-number:
+        description: "Issue number"
+        required: true
+        type: number
 
 jobs:
   create-pull-request:
