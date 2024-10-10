@@ -71,10 +71,12 @@ jobs:
       - name: Create prompt
         id: create_prompt
         uses: actions/github-script@v7
+        env:
+          COMMENT: ${{ inputs.comment }}
         with:
           result-encoding: string
           script: |
-            const comment = '${{ inputs.comment }}';
+            const comment = process.env.COMMENT;
             const prompt = comment.replace(/^\/aider\s*/, '');
             return `Apply all necessary changes to implement the following request: \n${prompt}`;
       - name: Apply changes with Aider
