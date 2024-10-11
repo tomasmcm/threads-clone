@@ -188,13 +188,6 @@ jobs:
           groq_api_key: ${{ secrets.groq_api_key }}
           openrouter_api_key: ${{ secrets.openrouter_api_key }}
 
-      - name: Capture Aider Edit output
-        id: capture_aider_edit_output
-        run: |
-          echo 'AIDER_EDIT_OUTPUT<<EOF' >> $GITHUB_ENV
-          echo "${{ steps.aider_edit.outputs.stdout }}" >> $GITHUB_ENV
-          echo 'EOF' >> $GITHUB_ENV
-
       - name: Create Pull Request
         uses: actions/github-script@v7
         id: create_pull_request
@@ -203,6 +196,9 @@ jobs:
           BRANCH_REF: ${{ fromJson(steps.create_branch.outputs.result).ref }}
           BASE_BRANCH: ${{ inputs.base-branch }}
           ISSUE_NUMBER: ${{ inputs.issue-number }}
+          AIDER_OUTPUTS: ${{ toJson(steps.aider_edit.outputs) }}
+          AIDER_OUTCOME: ${{ steps.aider_edit.outcome }}
+          JOB_CONTEXT: ${{ toJson(job) }}
         with:
           script: |
             const { repo, owner } = context.repo;
@@ -234,10 +230,26 @@ jobs:
                 `Fixes #${process.env.ISSUE_NUMBER}`,
                 '',
                 '<details>',
-                '<summary>Aider Edit Output</summary>',
+                '<summary>Aider Edit Outputs</summary>',
+                '',
+                '```json',
+                aiderOutputs,
+                '```',
+                '</details>',
+                '',
+                '<details>',
+                '<summary>Aider Edit Outcome</summary>',
                 '',
                 '```',
-                aiderEditOutput,
+                aiderOutcome,
+                '```',
+                '</details>',
+                '',
+                '<details>',
+                '<summary>Job Context</summary>',
+                '',
+                '```json',
+                jobContext,
                 '```',
                 '</details>'
               ].join('\n')
