@@ -113,7 +113,7 @@ const SeedPage: React.FC = ({}) => {
               aria-hidden="true"
             />
           )}
-          Add Smiths
+          Add Threads
         </Button>
 
         <Button

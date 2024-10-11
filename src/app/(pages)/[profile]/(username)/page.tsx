@@ -36,9 +36,9 @@ const ProfilePage: React.FC = ({ }) => {
       </div>
     )
   }
-  
+
   if (isError) return <NotFound />
-  
+
   return (
     <div>
       {data ? (
@@ -51,7 +51,7 @@ const ProfilePage: React.FC = ({ }) => {
           ))
         ) : (
           <div className="h-[50vh] w-full justify-center items-center flex text-[#777777]">
-            <p>No smiths yet.</p>
+            <p>No threads yet.</p>
           </div>
         )
       ) : (
@@ -59,7 +59,7 @@ const ProfilePage: React.FC = ({ }) => {
       )}
     </div>
   );
-  
+
 }
-  
+
 export default ProfilePage
