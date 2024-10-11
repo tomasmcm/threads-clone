@@ -20,7 +20,7 @@ const SeedPage: React.FC = ({}) => {
       setIsLoading("user");
       const res = await createFakeUsers();
       if (res) {
-        toast.error("Created fake users.");
+        toast.success("Created fake users.");
       }
     } catch (error) {
       toast.error("Something went wrong!");
