@@ -201,7 +201,7 @@ jobs:
           BRANCH_REF: ${{ fromJson(steps.create_branch.outputs.result).ref }}
           BASE_BRANCH: ${{ inputs.base-branch }}
           ISSUE_NUMBER: ${{ inputs.issue-number }}
-          JOB_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}/job/${{ github.job }}
+          JOB_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
         with:
           script: |
             const { repo, owner } = context.repo;
