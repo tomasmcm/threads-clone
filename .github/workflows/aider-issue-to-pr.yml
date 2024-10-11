@@ -156,43 +156,8 @@ jobs:
               edit: `Analyse the request below and apply all the necessary changes based on the description. Request access to the files you need.\nTitle: ${title}\nDescription:\n${body}`,
               review: `Review and verify if the request below was fully implemented. Fix any missing changes. Request access to the files you need.\nTitle: ${title}\nDescription:\n${body}`,
             });
-      
-      - name: Get Aider version
-        id: aider_version
-        run: |
-          AIDER_VERSION=$(curl -s https://api.github.com/repos/Aider-AI/aider/releases/latest | jq -r .tag_name)
-          echo "AIDER_VERSION=${AIDER_VERSION}" >> $GITHUB_OUTPUT
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: Cache Docker layers
-        uses: actions/cache@v3
-        with:
-          path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-buildx-aider-${{ steps.aider_version.outputs.AIDER_VERSION }}
-          restore-keys: |
-            ${{ runner.os }}-buildx-aider-
-
-      - name: Build and cache Aider Docker image
-        uses: docker/build-push-action@v5
-        with:
-          context: "https://github.com/mirrajabi/aider-github-action.git"
-          push: false
-          load: true
-          tags: mirrajabi/aider-github-action:${{ steps.aider_version.outputs.AIDER_VERSION }}
-          cache-from: type=local,src=/tmp/.buildx-cache
-          cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
-          build-args: |
-            AIDER_VERSION=${{ steps.aider_version.outputs.AIDER_VERSION }}
-
-      - name: Move cache
-        run: |
-          rm -rf /tmp/.buildx-cache
-          mv /tmp/.buildx-cache-new /tmp/.buildx-cache
-
       - name: Apply changes with Aider
-        uses: docker://mirrajabi/aider-github-action:${{ steps.aider_version.outputs.AIDER_VERSION }}
+        uses: mirrajabi/aider-github-action@main
         timeout-minutes: ${{ inputs.chat-timeout }}
         id: aider_edit
         with:
@@ -213,7 +178,7 @@ jobs:
           git reset --hard origin/${{ fromJson(steps.create_branch.outputs.result).ref }}
           
       - name: Review changes with Aider
-        uses: docker://mirrajabi/aider-github-action:${{ steps.aider_version.outputs.AIDER_VERSION }}
+        uses: mirrajabi/aider-github-action@main
         timeout-minutes: ${{ inputs.chat-timeout }}
         id: aider_review
         with:
