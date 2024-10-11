@@ -42,7 +42,7 @@ This is an open source **Smiths clone** built with ***`create-t3-app`*** and eve
 1. Clone the repository
 
    ```bash
-   git clone https://github.com/sujjeee/threads-clone.git
+   git clone https://github.com/sujjeee/smiths-clone.git
    ```
 
 2. Install dependencies using pnpm
