@@ -1,14 +1,14 @@
-# [Threads clone](https://threads.codebustar.com)
+# [Smiths clone](https://smiths.codebustar.com)
 
-This is an open source **threads-clone** build with ***`create-t3-app`*** and  everything new in Next.js 13 and 14.
+This is an open source **Smiths clone** built with ***`create-t3-app`*** and everything new in Next.js 13 and 14.
 
-|1. Feed Page |2. Search Page |
+| 1. Feed Page | 2. Search Page |
 |:---:|:---:|
-| ![Feed Page](./public/screenshots/feed-page.png) | ![Search Page](./public/screenshots/search-page.png)|
-| 3. Reply Card | 4. Notifications Page | 
-| ![Reply Card](./public/screenshots/reply-card.png) | ![Notifications Page](./public/screenshots/notification-page.png)|
+| ![Feed Page](./public/screenshots/feed-page.png) | ![Search Page](./public/screenshots/search-page.png) |
+| 3. Reply Card | 4. Notifications Page |
+| ![Reply Card](./public/screenshots/reply-card.png) | ![Notifications Page](./public/screenshots/notification-page.png) |
 | 5. Post Info Page | 6. Profile Page |
-| ![Post Info Page](./public/screenshots/post-info-page.png) | ![Profile Page](./public/screenshots/profile-page.png)|
+| ![Post Info Page](./public/screenshots/post-info-page.png) | ![Profile Page](./public/screenshots/profile-page.png) |
 
 
 ## Tech Stack
@@ -34,7 +34,7 @@ This is an open source **threads-clone** build with ***`create-t3-app`*** and  e
 - Image filteration with **nsfw-filter**
 - Custom notifications on user interactions
 - Custom component on top of  **shadcn/ui**
-- Recursive threads with **prisma.$queryRaw**
+- Recursive posts with **prisma.$queryRaw**
 - ***...and many more !***
 
 ## Running Locally
@@ -42,7 +42,7 @@ This is an open source **threads-clone** build with ***`create-t3-app`*** and  e
 1. Clone the repository
 
    ```bash
-   git clone https://github.com/sujjeee/threads-clone.git
+   git clone https://github.com/sujjeee/smiths-clone.git
    ```
 
 2. Install dependencies using pnpm
