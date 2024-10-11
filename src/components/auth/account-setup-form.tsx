@@ -206,7 +206,7 @@ export default function AccountSetupForm({ username }: { username: string }) {
                             Privacy
                         </h2>
                         <span className="leading-7 text-muted-foreground text-center ">
-                            Your privacy can be different on Threads and Instagarm.
+                            Your privacy can be different on Smiths and Instagarm.
                         </span>
 
                         <RadioGroup defaultValue="public" className="flex flex-col gap-3 w-full mt-6 sm:mt-10">
@@ -229,7 +229,7 @@ export default function AccountSetupForm({ username }: { username: string }) {
                                         <Globe className='w-5 h-5' />
                                     </div>
                                     <span className='max-w-[350px]'>
-                                        Anyone on or off Threads can see, share and interact with your content.
+                                        Anyone on or off Smiths can see, share and interact with your content.
                                     </span>
                                 </Label>
                             </div>
