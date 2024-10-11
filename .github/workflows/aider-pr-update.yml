@@ -103,6 +103,11 @@ jobs:
           groq_api_key: ${{ secrets.groq_api_key }}
           openrouter_api_key: ${{ secrets.openrouter_api_key }}
 
+      - name: Force pull latest changes
+        run: |
+          git fetch origin
+          git reset --hard origin/${{ fromJson(steps.create_branch.outputs.result).ref }}
+          
       - name: Review changes with Aider
         uses: mirrajabi/aider-github-action@main
         timeout-minutes: ${{ inputs.chat-timeout }}
