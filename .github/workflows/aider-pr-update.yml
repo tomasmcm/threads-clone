@@ -80,15 +80,20 @@ jobs:
           result-encoding: string
           script: |
             const comment = process.env.COMMENT;
-            const prompt = comment.replace(/^\/aider\s*/, '');
-            return `Apply all necessary changes to implement the following request: \n${prompt}`;
+            const body = comment.replace(/^\/aider\s*/, '');
+
+            return JSON.stringify({
+              edit: `Analyse the request below and apply all the necessary changes based on the description. Request access to the files you need.\nDescription:\n${body}`,
+              review: `Review and verify if the request below was fully implemented. Fix any missing changes. Request access to the files you need.\nDescription:\n${body}`,
+            });
       - name: Apply changes with Aider
         uses: mirrajabi/aider-github-action@main
         timeout-minutes: ${{ inputs.chat-timeout }}
+        id: aider_edit
         with:
           branch: refs/heads/${{ fromJson(steps.get_pr_details.outputs.result).head_ref }}
           model: ${{ inputs.model }}
-          aider_args: '--yes-always --architect --no-auto-lint --message "${{ steps.create_prompt.outputs.result }}" --chat-history-file ".aider.chat.history.md"'
+          aider_args: '--yes-always --architect --no-auto-lint --message "${{ fromJson(steps.create_prompt.outputs.result).edit }}" --map-tokens 2048'
           # API keys
           openai_api_key: ${{ secrets.openai_api_key }}
           anthropic_api_key: ${{ secrets.anthropic_api_key }}
@@ -98,25 +103,27 @@ jobs:
           groq_api_key: ${{ secrets.groq_api_key }}
           openrouter_api_key: ${{ secrets.openrouter_api_key }}
 
-      - name: Check for chat history file
-        run: |
-          if [ -f ".aider.chat.history.md" ]; then
-            echo "Chat history file exists"
-          else
-            echo "Chat history file not found"
-            echo "Current directory contents:"
-            ls -la
-          fi
-
-      - name: Upload aider chat history
-        uses: actions/upload-artifact@v3
-        if: always()
+      - name: Review changes with Aider
+        uses: mirrajabi/aider-github-action@main
+        timeout-minutes: ${{ inputs.chat-timeout }}
+        id: aider_review
         with:
-          name: aider-chat-output
-          path: ".aider.chat.history.md"
+          branch: refs/heads/${{ fromJson(steps.get_pr_details.outputs.result).head_ref }}
+          model: ${{ inputs.model }}
+          aider_args: '--yes-always --architect --no-auto-lint --message "${{ fromJson(steps.create_prompt.outputs.result).review }}" --map-tokens 2048'
+          # API keys
+          openai_api_key: ${{ secrets.openai_api_key }}
+          anthropic_api_key: ${{ secrets.anthropic_api_key }}
+          cohere_api_key: ${{ secrets.cohere_api_key }}
+          deepseek_api_key: ${{ secrets.deepseek_api_key }}
+          gemini_api_key: ${{ secrets.gemini_api_key }}
+          groq_api_key: ${{ secrets.groq_api_key }}
+          openrouter_api_key: ${{ secrets.openrouter_api_key }}
 
       - name: Add comment to PR
         uses: actions/github-script@v7
+        env:
+          JOB_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}/job/${{ github.job }}
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
@@ -124,5 +131,5 @@ jobs:
               issue_number: ${{ inputs.pr-number }},
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: 'Aider has processed your request. Please review the changes and let me know if you need any further modifications.'
+              body: `Aider has processed your request. Please review the changes and let me know if you need any further modifications.\n\nFor full details of the Aider execution, please check the [job log](${process.env.JOB_URL}).`
             })
