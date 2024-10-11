@@ -2,7 +2,7 @@ export type SiteConfig = typeof siteConfig
 
 export const siteConfig = {
     name: "Smiths",
-    description: "Open source Smiths clone with t3 stack.",
+    description: "Open source Smiths clone with T3 stack.",
     url: "https://smiths.codebustar.com",
     ogImage: "https://smiths.codebustar.com/opengraph-image.png",
     links: {
