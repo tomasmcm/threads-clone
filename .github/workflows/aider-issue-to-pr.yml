@@ -163,7 +163,7 @@ jobs:
         with:
           branch: ${{ fromJson(steps.create_branch.outputs.result).ref }}
           model: ${{ inputs.model }}
-          aider_args: '--yes-always --architect --no-auto-lint --message "${{ fromJson(steps.create_prompt.outputs.result).edit }}" --chat-history-file ".aider.chat.history.md"'
+          aider_args: '--yes-always --architect --no-auto-lint --message "${{ fromJson(steps.create_prompt.outputs.result).edit }}" --map-tokens 2048'
           openai_api_key: ${{ secrets.openai_api_key }}
           anthropic_api_key: ${{ secrets.anthropic_api_key }}
           cohere_api_key: ${{ secrets.cohere_api_key }}
@@ -179,7 +179,7 @@ jobs:
         with:
           branch: ${{ fromJson(steps.create_branch.outputs.result).ref }}
           model: ${{ inputs.model }}
-          aider_args: '--yes-always --architect --no-auto-lint --message "${{ fromJson(steps.create_prompt.outputs.result).review }}" --chat-history-file ".aider.chat.history.md"'
+          aider_args: '--yes-always --architect --no-auto-lint --message "${{ fromJson(steps.create_prompt.outputs.result).review }}" --map-tokens 2048'
           openai_api_key: ${{ secrets.openai_api_key }}
           anthropic_api_key: ${{ secrets.anthropic_api_key }}
           cohere_api_key: ${{ secrets.cohere_api_key }}
@@ -218,7 +218,10 @@ jobs:
               return existingPR;
             }
 
-            const aiderEditOutput = process.env.AIDER_EDIT_OUTPUT || 'No output available';
+            const aiderOutputs = process.env.AIDER_OUTPUTS || 'No outputs available';
+            const aiderOutcome = process.env.AIDER_OUTCOME || 'No outcome available';
+            const jobContext = process.env.JOB_CONTEXT || 'No job context available';
+
             const newPR = await github.rest.pulls.create({
               title: `[Aider] ${process.env.ISSUE_TITLE}`,
               owner,
