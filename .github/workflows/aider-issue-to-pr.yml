@@ -161,7 +161,7 @@ jobs:
         id: aider_version
         run: |
           AIDER_VERSION=$(curl -s https://api.github.com/repos/Aider-AI/aider/releases/latest | jq -r .tag_name)
-          echo "AIDER_VERSION=${AIDER_VERSION}" >> $GITHUB_ENV
+          echo "AIDER_VERSION=${AIDER_VERSION}" >> $GITHUB_OUTPUT
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
@@ -170,7 +170,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-buildx-aider-${{ env.AIDER_VERSION }}
+          key: ${{ runner.os }}-buildx-aider-${{ steps.aider_version.outputs.AIDER_VERSION }}
           restore-keys: |
             ${{ runner.os }}-buildx-aider-
 
@@ -180,11 +180,11 @@ jobs:
           context: "https://github.com/mirrajabi/aider-github-action.git"
           push: false
           load: true
-          tags: mirrajabi/aider-github-action:${{ env.AIDER_VERSION }}
+          tags: mirrajabi/aider-github-action:${{ steps.aider_version.outputs.AIDER_VERSION }}
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
           build-args: |
-            AIDER_VERSION=${{ env.AIDER_VERSION }}
+            AIDER_VERSION=${{ steps.aider_version.outputs.AIDER_VERSION }}
 
       - name: Move cache
         run: |
@@ -192,7 +192,7 @@ jobs:
           mv /tmp/.buildx-cache-new /tmp/.buildx-cache
 
       - name: Apply changes with Aider
-        uses: docker://mirrajabi/aider-github-action:${{ env.AIDER_VERSION }}
+        uses: docker://mirrajabi/aider-github-action:${{ steps.aider_version.outputs.AIDER_VERSION }}
         timeout-minutes: ${{ inputs.chat-timeout }}
         id: aider_edit
         with:
@@ -213,7 +213,7 @@ jobs:
           git reset --hard origin/${{ fromJson(steps.create_branch.outputs.result).ref }}
           
       - name: Review changes with Aider
-        uses: docker://mirrajabi/aider-github-action:${{ env.AIDER_VERSION }}
+        uses: docker://mirrajabi/aider-github-action:${{ steps.aider_version.outputs.AIDER_VERSION }}
         timeout-minutes: ${{ inputs.chat-timeout }}
         id: aider_review
         with:
