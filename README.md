@@ -1,6 +1,6 @@
-# [Threads clone](https://threads.codebustar.com)
+# [Smiths clone](https://smiths.codebustar.com)
 
-This is an open source **threads-clone** build with ***`create-t3-app`*** and  everything new in Next.js 13 and 14.
+This is an open source **Smiths clone** built with ***`create-t3-app`*** and everything new in Next.js 13 and 14.
 
 |1. Feed Page |2. Search Page |
 |:---:|:---:|
@@ -14,13 +14,13 @@ This is an open source **threads-clone** build with ***`create-t3-app`*** and  e
 ## Tech Stack
 
 - **Framework:** [Next.js](https://nextjs.org)
-- **Language:** [Typescript](https://www.typescriptlang.org/docs/)
+- **Language:** [TypeScript](https://www.typescriptlang.org/docs/)
 - **Styling:** [Tailwind CSS](https://tailwindcss.com)
 - **User Management:** [Clerk](https://clerk.com)
 - **ORM:** [Prisma ORM](https://www.prisma.io/)
 - **UI Components:** [shadcn/ui](https://ui.shadcn.com)
 - **File Uploads:** [uploadthing](https://uploadthing.com)
-- **Typesafe APIs:** [tRPC](https://trpc.io)
+- **Type-safe APIs:** [tRPC](https://trpc.io)
 - **Hosting:** [Vercel](https://vercel.com/)
 
 ## Key Features
@@ -34,7 +34,7 @@ This is an open source **threads-clone** build with ***`create-t3-app`*** and  e
 - Image filteration with **nsfw-filter**
 - Custom notifications on user interactions
 - Custom component on top of  **shadcn/ui**
-- Recursive threads with **prisma.$queryRaw**
+- Recursive Smiths with **prisma.$queryRaw**
 - ***...and many more !***
 
 ## Running Locally
