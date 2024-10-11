@@ -153,8 +153,8 @@ jobs:
             const body = `${{ fromJson(steps.get_issue.outputs.result).body }}`;
 
             return JSON.stringify({
-              edit: `Analyse the task below and apply all the necessary changes based on the description.\nTitle: ${title}\nDescription:\n${body}`,
-              review: `Review and verify if the task below was fully implemented. Fix any missing changes.\nTitle: ${title}\nDescription:\n${body}`,
+              edit: `Analyse the task below and apply all the necessary changes based on the description. Request access to the files you need.\nTitle: ${title}\nDescription:\n${body}`,
+              review: `Review and verify if the task below was fully implemented. Fix any missing changes. Request access to the files you need.\nTitle: ${title}\nDescription:\n${body}`,
             });
       - name: Apply changes with Aider
         uses: mirrajabi/aider-github-action@main
@@ -188,6 +188,13 @@ jobs:
           groq_api_key: ${{ secrets.groq_api_key }}
           openrouter_api_key: ${{ secrets.openrouter_api_key }}
 
+      - name: Capture Aider Edit output
+        id: capture_aider_edit_output
+        run: |
+          echo 'AIDER_EDIT_OUTPUT<<EOF' >> $GITHUB_ENV
+          echo "${{ steps.aider_edit.outputs.stdout }}" >> $GITHUB_ENV
+          echo 'EOF' >> $GITHUB_ENV
+
       - name: Create Pull Request
         uses: actions/github-script@v7
         id: create_pull_request
@@ -196,7 +203,6 @@ jobs:
           BRANCH_REF: ${{ fromJson(steps.create_branch.outputs.result).ref }}
           BASE_BRANCH: ${{ inputs.base-branch }}
           ISSUE_NUMBER: ${{ inputs.issue-number }}
-          AIDER_EDIT_OUTPUT: ${{ steps.aider_edit.outputs.output }}
         with:
           script: |
             const { repo, owner } = context.repo;
