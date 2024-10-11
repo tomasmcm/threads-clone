@@ -152,10 +152,10 @@ jobs:
             const title = `${{ fromJson(steps.get_issue.outputs.result).title }}`;
             const body = `${{ fromJson(steps.get_issue.outputs.result).body }}`;
 
-            return {
+            return JSON.stringify({
               edit: `Analyse the task below and apply all the necessary changes based on the description.\nTitle: ${title}\nDescription:\n${body}`,
               review: `Review and verify if the task below was fully implemented. Fix any missing changes.\nTitle: ${title}\nDescription:\n${body}`,
-            };
+            });
       - name: Apply changes with Aider
         uses: mirrajabi/aider-github-action@main
         timeout-minutes: ${{ inputs.chat-timeout }}
