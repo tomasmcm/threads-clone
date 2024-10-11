@@ -50,39 +50,6 @@ jobs:
       contents: write
     runs-on: ubuntu-latest
     steps:
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: Get aider-chat version
-        id: aider_version
-        run: |
-          AIDER_VERSION=$(curl -s https://api.github.com/repos/Aider-AI/aider/releases/latest | jq -r .tag_name)
-          echo "AIDER_VERSION=${AIDER_VERSION}" >> $GITHUB_OUTPUT
-
-      - name: Cache Docker images
-        uses: actions/cache@v3
-        with:
-          path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-buildx-aider-${{ steps.aider_version.outputs.AIDER_VERSION }}
-          restore-keys: |
-            ${{ runner.os }}-buildx-aider-
-
-      - name: Pull and cache Aider Docker image
-        uses: docker/build-push-action@v5
-        with:
-          push: false
-          load: true
-          tags: mirrajabi/aider-github-action:latest
-          cache-from: type=local,src=/tmp/.buildx-cache
-          cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
-          build-args: |
-            AIDER_VERSION=${{ steps.aider_version.outputs.AIDER_VERSION }}
-
-      - name: Move cache
-        run: |
-          rm -rf /tmp/.buildx-cache
-          mv /tmp/.buildx-cache-new /tmp/.buildx-cache
-
       - name: Get PR details
         uses: actions/github-script@v7
         id: get_pr_details
