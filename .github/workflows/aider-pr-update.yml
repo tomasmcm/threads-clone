@@ -106,7 +106,7 @@ jobs:
       - name: Force pull latest changes
         run: |
           git fetch origin
-          git reset --hard origin/${{ fromJson(steps.create_branch.outputs.result).ref }}
+          git reset --hard origin/${{ fromJson(steps.get_pr_details.outputs.result).head_ref }}
           
       - name: Review changes with Aider
         uses: mirrajabi/aider-github-action@main
