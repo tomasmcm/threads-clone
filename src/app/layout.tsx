@@ -18,7 +18,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://threads.codebustar.com'),
+  metadataBase: new URL('https://smiths.codebustar.com'),
   title: {
     default: siteConfig.name,
     template: `%s • ${siteConfig.name}`,
