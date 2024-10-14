@@ -64,8 +64,7 @@ export default function AccountSetupForm({ username }: { username: string }) {
             if (success) {
                 router.push(origin ? `${origin}` : '/')
             }
-            toast.success(`Welcome to threads ${username} !`)
-
+            toast.success(`Welcome to smiths ${username} !`)
         },
         onError: (err) => {
             toast.error("AuthCallBack: Something went wrong!")
@@ -137,7 +136,7 @@ export default function AccountSetupForm({ username }: { username: string }) {
                                     Profile
                                 </h2>
                                 <span className="leading-7 text-muted-foreground ">
-                                    Customize your Threads profile
+                                    Customize your Smiths profile
                                 </span>
                                 <Card className='w-full p-6 px-8 bg-transparent rounded-2xl my-4 sm:mt-10'>
                                     <div className="flex flex-col gap-4">
@@ -206,7 +205,7 @@ export default function AccountSetupForm({ username }: { username: string }) {
                             Privacy
                         </h2>
                         <span className="leading-7 text-muted-foreground text-center ">
-                            Your privacy can be different on Threads and Instagarm.
+                            Your privacy can be different on Smiths and Instagarm.
                         </span>
 
                         <RadioGroup defaultValue="public" className="flex flex-col gap-3 w-full mt-6 sm:mt-10">
@@ -229,7 +228,7 @@ export default function AccountSetupForm({ username }: { username: string }) {
                                         <Globe className='w-5 h-5' />
                                     </div>
                                     <span className='max-w-[350px]'>
-                                        Anyone on or off Threads can see, share and interact with your content.
+                                        Anyone on or off Smiths can see, share and interact with your content.
                                     </span>
                                 </Label>
                             </div>

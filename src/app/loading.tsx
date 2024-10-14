@@ -9,7 +9,7 @@ export default function RootLoading() {
         <div className="flex flex-col justify-between h-screen ">
             <div className="flex-grow flex items-center justify-center ">
                 <Image
-                    alt="Threads"
+                    alt="Smiths"
                     src={LogoImage}
                     width={100}
                     height={100}
