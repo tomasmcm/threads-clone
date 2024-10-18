@@ -18,7 +18,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://threads.codebustar.com'),
+  metadataBase: new URL('https://smiths.codebustar.com'),
   title: {
     default: siteConfig.name,
     template: `%s • ${siteConfig.name}`,
@@ -29,8 +29,8 @@ export const metadata: Metadata = {
     "prisma",
     "tRPC",
     "sujjeee",
-    "threads",
-    "threads-clone",
+    "Smiths",
+    "Smiths-clone",
     "t3-stack",
     "uploadthing",
     "shadcn ui"
