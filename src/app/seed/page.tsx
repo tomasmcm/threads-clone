@@ -48,6 +48,7 @@ const SeedPage: React.FC = ({}) => {
       setIsLoading("delete");
       const res = await deleteFakeUsers();
       if (res) {
+ {
         toast.error("Deleted fake users.");
       }
     } catch (error) {
@@ -113,7 +114,7 @@ const SeedPage: React.FC = ({}) => {
               aria-hidden="true"
             />
           )}
-          Add Threads
+          Add Smiths
         </Button>
 
         <Button
