@@ -1,4 +1,4 @@
-import Banner from "@/components/threads-banner"
+import Banner from "@/components/smiths-banner"
 import SiteFooter from "@/components/layouts/site-footer"
 import QRcode from "@/components/qr-code"
 import { currentUser } from "@clerk/nextjs"
