@@ -10,6 +10,6 @@ jobs:
     with:
       issue-number: ${{ github.event.issue.number }}
       base-branch: ${{ github.event.repository.default_branch }}
-      model: 'claude-3-5-sonnet-20240620'
+      model: 'claude-3-5-sonnet-20241022'
     secrets: 
       anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
