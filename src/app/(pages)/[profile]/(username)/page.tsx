@@ -51,7 +51,7 @@ const ProfilePage: React.FC = ({ }) => {
           ))
         ) : (
           <div className="h-[50vh] w-full justify-center items-center flex text-[#777777]">
-            <p>No threads yet.</p>
+            <p>No smiths yet.</p>
           </div>
         )
       ) : (
