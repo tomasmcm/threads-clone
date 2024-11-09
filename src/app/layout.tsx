@@ -29,8 +29,8 @@ export const metadata: Metadata = {
     "prisma",
     "tRPC",
     "sujjeee",
-    "threads",
-    "threads-clone",
+    "smiths",
+    "smiths-clone",
     "t3-stack",
     "uploadthing",
     "shadcn ui"

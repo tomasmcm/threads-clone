@@ -1,6 +1,6 @@
-# [Threads clone](https://threads.codebustar.com)
+# [Smiths clone](https://smiths.codebustar.com)
 
-This is an open source **threads-clone** build with ***`create-t3-app`*** and  everything new in Next.js 13 and 14.
+This is an open source **smiths-clone** build with ***`create-t3-app`*** and  everything new in Next.js 13 and 14.
 
 |1. Feed Page |2. Search Page |
 |:---:|:---:|
