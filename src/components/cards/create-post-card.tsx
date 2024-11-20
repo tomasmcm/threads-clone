@@ -41,25 +41,25 @@ const CreatePostCard: React.FC = ({}) => {
 
   const { startUpload } = useUploadThing("postImage");
 
-  const [threadData, setThreadData] = React.useState({
+  const [smithData, setSmithData] = React.useState({
     privacy: postPrivacy,
     text: "",
   });
 
   React.useEffect(() => {
-    setThreadData((prevThreadData) => ({
-      ...prevThreadData,
+    setSmithData((prevSmithData) => ({
+      ...prevSmithData,
       privacy: postPrivacy,
     }));
   }, [postPrivacy]);
 
   const trpcUtils = api.useUtils();
 
-  const { isLoading, mutateAsync: createThread } =
+  const { isLoading, mutateAsync: createSmith } =
     api.post.createPost.useMutation({
       onMutate: ({}) => {
-        setThreadData({
-          ...threadData,
+        setSmithData({
+          ...smithData,
           text: "",
         });
         // TODO: Add new optimistic update, old one is not working
@@ -106,16 +106,16 @@ const CreatePostCard: React.FC = ({}) => {
 
     const promise = replyPostInfo
       ? replyToPost({
-          text: JSON.stringify(threadData.text, null, 2),
+          text: JSON.stringify(smithData.text, null, 2),
           postId: replyPostInfo.id,
           imageUrl: imgRes ? imgRes[0]?.url : undefined,
-          privacy: threadData.privacy,
+          privacy: smithData.privacy,
           postAuthor: replyPostInfo.author.id,
         })
-      : createThread({
-          text: JSON.stringify(threadData.text, null, 2),
+      : createSmith({
+          text: JSON.stringify(smithData.text, null, 2),
           imageUrl: imgRes ? imgRes[0]?.url : undefined,
-          privacy: threadData.privacy,
+          privacy: smithData.privacy,
           quoteId: quoteInfo?.id,
           postAuthor: quoteInfo?.author.id,
         });
@@ -123,7 +123,7 @@ const CreatePostCard: React.FC = ({}) => {
     return promise;
   }
 
-  function handleCreateThread() {
+  function handleCreateSmith() {
     setOpenDialog(false);
     const promise = handleMutation();
 
@@ -157,15 +157,15 @@ const CreatePostCard: React.FC = ({}) => {
   }
 
   const handleFieldChange = (textValue: string) => {
-    setThreadData({
-      ...threadData,
+    setSmithData({
+      ...smithData,
       text: textValue,
     });
   };
 
   React.useEffect(() => {
     if (!openDialog) {
-      setThreadData({
+      setSmithData({
         privacy: postPrivacy,
         text: "",
       });
@@ -183,7 +183,7 @@ const CreatePostCard: React.FC = ({}) => {
       </DialogTrigger>
       <DialogContent className="w-full max-w-lg select-none border-none bg-transparent shadow-none outline-none sm:max-w-[668px]">
         <h1 className="mb-2 w-full text-center font-bold text-white">
-          {replyPostInfo ? <>Reply</> : <>New thread</>}
+          {replyPostInfo ? <>Reply</> : <>New smith</>}
         </h1>
         <Card className="rounded-2xl border-none bg-background shadow-2xl ring-1 ring-[#393939] ring-offset-0 dark:bg-[#181818] ">
           <div className="no-scrollbar max-h-[70vh] overflow-y-auto p-6 ">
