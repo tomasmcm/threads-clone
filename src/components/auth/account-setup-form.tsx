@@ -64,8 +64,8 @@ export default function AccountSetupForm({ username }: { username: string }) {
             if (success) {
                 router.push(origin ? `${origin}` : '/')
             }
-            toast.success(`Welcome to threads ${username} !`)
-
+            toast.success(`Welcome to smiths ${username} !`)
+    
         },
         onError: (err) => {
             toast.error("AuthCallBack: Something went wrong!")

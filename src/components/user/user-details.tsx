@@ -50,7 +50,7 @@ const UserProfile: React.FC<UserProfileInfoProps> = (props) => {
                         <h4 className="text-[15px]">
                             {username}
                         </h4>
-                        <span className="ml-0.5 rounded-2xl bg-primary text-[#777777] text-xm px-1.5 py-1 text-[11px] font-medium">threads.net</span>
+                        <span className="ml-0.5 rounded-2xl bg-primary text-[#777777] text-xm px-1.5 py-1 text-[11px] font-medium">smiths.net</span>
                     </div>
                 </div>
                 <Avatar className="h-[80px] w-[80px] overflow-visible outline outline-2 outline-border relative">
@@ -111,7 +111,7 @@ const UserProfile: React.FC<UserProfileInfoProps> = (props) => {
                     href={`/${basePath}`} className={cn("flex items-center justify-center w-full h-12  font-medium  duration-200  text-center text-neutral-600", {
                         "border-b-2 border-foreground text-foreground": lastSegment === basePath
                     })}>
-                    Threads
+                    Smiths
                 </Link>
                 <Link
                     href={`/${basePath}/replies`}
