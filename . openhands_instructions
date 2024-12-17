@@ -1,0 +1,18 @@
+Repository: Threads Clone
+Description: Threads built with the t3-stack: Next.js 14, TypeScript, tRPC, Tailwind CSS, Shadcn ui, Prisma ORM, and Clerk Auth.
+
+Directory Structure:
+- src/: Main application code
+- prisma/: DB schema
+- public/: Static files
+
+Setup:
+- Run `npm install` to install dependencies
+- Use `npm run dev` for development
+- Run `npm run build` for building
+- Run `npm run lint` for linting
+
+Guidelines:
+- Follow ESLint configuration
+- Do not write tests (this is not a production app)
+- Use TypeScript for new code
